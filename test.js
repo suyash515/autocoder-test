@@ -1,16 +1,29 @@
-/**
- * Seed Function
- * (sails.config.bootstrap)
- *
- * A function that runs just before your Sails app gets lifted.
- * > Need more flexibility?  You can also create a hook.
- *
- * For more information on seeding your app with fake data, check out:
- * https://sailsjs.com/config/bootstrap
- */
+module.exports = {
+    friendlyName: "Hash passwords using bcrypt-nodejs",
+    description: "Hash passwords using bcrypt-nodejs",
+    inputs: {
+        password: {
+            type: "string",
+            example: "test",
+            description: "Password that will be hashed",
+            required: true
+        }
+    },
 
-module.exports.bootstrap = async function() {
-    // if(sails.config.queue_settings.initialize_consumer_queue) {
-    //     sails.helpers.application.llm.initializeLlmQueue().then();
-    // }
+    fn: async function(inputs, exits) {
+        let bcrypt = require("bcrypt-nodejs"),
+            hashedPassword = "";
+
+        hashedPassword = await new Promise((resolve, reject) => {
+            bcrypt.hash(inputs.password, null, null, (err, hash) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(hash);
+                }
+            });
+        });
+
+        return exits.success(hashedPassword);
+    }
 };

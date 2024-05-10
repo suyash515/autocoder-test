@@ -1,0 +1,56 @@
+{
+    "name": "codeaura-ui-new",
+    "private": true,
+    "version": "0.0.0",
+    "description": "a Sails application",
+    "keywords": [],
+    "dependencies": {
+        "@pinecone-database/pinecone": "^2.1.0",
+        "@sailshq/connect-redis": "^6.1.3",
+        "@sailshq/lodash": "^3.10.3",
+        "@sailshq/socket.io-redis": "^5.2.0",
+        "@suyashsumaroo/simple-validator": "^0.2.6",
+        "asana": "^3.0.2",
+        "bcrypt-nodejs": "^0.0.3",
+        "check-password-strength": "^2.0.9",
+        "connect-mongo": "^2.0.3",
+        "connect-redis": "^6.1.3",
+        "consolidate": "^1.0.3",
+        "cookie": "^0.6.0",
+        "grunt": "1.0.4",
+        "openai": "^4.26.0",
+        "pug": "^3.0.2",
+        "request": "^2.88.2",
+        "sails": "^1.5.4",
+        "sails-hook-grunt": "^5.0.0",
+        "sails-hook-orm": "^4.0.0",
+        "sails-hook-sockets": "^2.0.0",
+        "sails.io.js": "^1.2.1",
+        "socket.io-client": "^2.5.0"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.23.6",
+        "babel-eslint": "^10.1.0",
+        "eslint": "^8.55.0"
+    },
+    "scripts": {
+        "start": "NODE_ENV=production node app.js",
+        "test": "npm run lint && npm run custom-tests && echo 'Done.'",
+        "lint": "./node_modules/eslint/bin/eslint.js . --max-warnings=0 --report-unused-disable-directives -c .eslintrc --ignore-path .eslintignore",
+        "lint-frontend": "./node_modules/eslint/bin/eslint.js . --max-warnings=0 --report-unused-disable-directives -c .eslintrc-frontend --ignore-path .eslintignore-frontend",
+        "lint-windows": "eslint . --max-warnings=0 --report-unused-disable-directives -c .eslintrc --ignore-path .eslintignore",
+        "lint-frontend-windows": "eslint . --max-warnings=0 --report-unused-disable-directives -c .eslintrc-frontend --ignore-path .eslintignore-frontend",
+        "custom-tests": "echo \"(No other custom tests yet.)\" && echo",
+        "lint-all": "npm run lint && npm run lint-frontend"
+    },
+    "main": "app.js",
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/suyash/codeaura-ui-new.git"
+    },
+    "author": "suyash",
+    "license": "",
+    "engines": {
+        "node": "^18.16"
+    }
+}

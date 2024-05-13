@@ -1,0 +1,1 @@
+module.exports = { friendlyName: "Helper to create a new user", description: "This helper handles the creation of a new user in the database.", inputs: { params: { type: 'ref', required: true } }, fn: async function(inputs, exits) { let insertedUser = await sails.models.user.create(inputs.params).fetch(); return exits.success(insertedUser); } };

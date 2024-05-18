@@ -11,10 +11,17 @@ module.exports = {
         }
     },
     fn: async function(inputs, exits) {
-        await sails.helpers.token.parseTokenTransaction();
-
-        return exits.success({
-            message: "extract-token-transaction completed"
-        });
+        try {
+            await sails.helpers.token.parseTokenTransaction();
+            return exits.success({
+                message: "extract-token-transaction completed"
+            });
+        } catch (error) {
+            sails.log.error(error);
+            return exits.jsonError({
+                message: 'Error extracting token transactions',
+                error: error.message
+            });
+        }
     }
-}
+};

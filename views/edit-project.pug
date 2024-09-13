@@ -1,0 +1,108 @@
+extends ../../layouts/logged-layout
+
+block content
+    .project
+        div(class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb")
+            h1(class="page-title fw-semibold fs-18 mb-0") #{__("Project")}
+            div(class="ms-md-1 ms-0")
+                nav
+                    ol(class="breadcrumb mb-0")
+                        li(class="breadcrumb-item") #{__("Project")}
+                        li(class="breadcrumb-item") 
+                            a(href="/project/project-list") #{__("Project List")}
+                        li(class="breadcrumb-item active", aria-current="page") #{__("Edit Project")}
+
+        .row.mb-5.d-flex
+            .col-xl-7
+                .card.custom-card.justify-content-between
+                    .card-header.d-sm-flex.d-block
+                        .card-title #{__("Edit Project")}
+                    .card-body
+                        input#txt_project_id.form-control(type="hidden" value=data.project.id)
+                        input#txt_formatted_repository_url.form-control(type="hidden", name="formatted_repository_url" value=data.project.repository_url)
+                        
+                        .row
+                            .col-xl-12.mb-3
+                                label.form-label(for="project_name") #{__("Project Name")}*
+                                input#txt_project_name.form-control(type="text", placeholder=__("Project Name") name="project" value=data.project.name)
+                            .col-xl-12.mb-3
+                                label.form-label(for="description") #{__("Description")}*
+                                textarea#txt_description.form-control(placeholder=__("Description") rows="5" cols="50")=data.project.description
+                            .col-xl-12.mb-3
+                                label.form-label(for="tech_stack") #{__("Tech Stack")}*
+                                    | &nbsp;&nbsp;
+                                    i.bi.bi-question-circle.form-question-icon(data-bs-toggle="tooltip" data-bs-custom-class="tooltip-primary" title=__("Define your tech stack, for example, HTML, CSS, NodeJS"))
+                                input#txt_tech_stack.form-control(type="text", placeholder=__("Tech Stack") name="project" value=data.project.tech_stack)
+                            div.form-divider
+                            span.fw-semibold.mb-1.text-muted #{__("Repository Details")}
+                            .col-xl-12.mb-3
+                                label.form-label(for="txt_tech_stack") #{__("Exclude Folders")}*
+                                    | &nbsp;&nbsp;
+                                    i.bi.bi-question-circle.form-question-icon(data-bs-toggle="tooltip" data-bs-custom-class="tooltip-primary" title=__("Set the folders that will be excluded. You can enter multiple folders separated by commas, for example, template, config/env"))
+                                input#txt_exclude_folders.form-control(type="text", placeholder=__("Exclude Folders"), value=data.project.exclude_folders)
+                            .col-xl-6.mb-3
+                                p.fw-semibold.mb-2 #{__("Repository Type")}*
+                                select#cbo_repository_type.form-control.form-select(name="repository_type" disabled=true)
+                                    option(value="bitbucket" selected=(data.project.repository_type === "bitbucket") ? true : false) #{__("Bitbucket")}
+                                    option(value="github" selected=(data.project.repository_type === "github") ? true : false) #{__("GitHub")} 
+                                    option(value="gitlab" selected=(data.project.repository_type === "gitlab") ? true : false)  #{__("Gitlab")} 
+                            .col-xl-6.mb-3
+                                label.form-label(for="txt_repository_url") #{__("Repository URL")}*
+                                input#txt_repository_url.form-control(type="text", placeholder="https://github.com/organization_or_user/repository_name" name="repository_url" value=data.project.display_repository_url disabled=true)
+                            
+                            .col-xl-6.mb-3(class=(data.project.create_type !== "auth") ? "" : "d-none")
+                                label.form-label(for="txt_repository_token") #{__("Repository Token")}*
+                                    | &nbsp;&nbsp;
+                                    i.bi.bi-question-circle.form-question-icon(data-bs-toggle="tooltip" data-bs-custom-class="tooltip-primary" title=__("Get your repository token based from the GitHub, BitBucket or GitLab site."))
+                                .input-group
+                                    input#txt_repository_token.form-control(type="password", placeholder=__("Repository Token") name="repository_token" value=data.project.repository_token)
+                                    button.btn.btn-light(onclick="createpassword('txt_repository_token',this)", type="button")
+                                        i.ri-eye-off-line.align-middle
+                            .col-xl-6.mb-3
+                                label.form-label(for="txt_branch_name") #{__("Branch Name")}*
+                                    | &nbsp;&nbsp;
+                                    i.bi.bi-question-circle.form-question-icon(data-bs-toggle="tooltip" data-bs-custom-class="tooltip-primary" title=__("We will use this branch for documentation. If no branch is specified, documentation will be done using the main branch."))
+                                input#txt_branch_name.form-control(type="text", placeholder="master" name="branch_name" value=data.project.branch_name)
+                            .col-xl-12.mb-3(class=data.project.open_source === "yes" ? "" : "d-none")
+                                .form-check.mt-3
+                                    input#ch_public_documentation.form-check-input(type="checkbox", value="" checked=data.project.public_documentation==="yes"?true:false)
+                                    label.form-check-label.text-muted.fw-normal(for="ch_public_documentation")
+                                        | #{__("Make the documentation of this project public")}
+                                        | &nbsp;
+                                        i.bi.bi-question-circle.form-question-icon(data-bs-toggle="tooltip" data-bs-custom-class="tooltip-primary" title=__("This feature makes the project documentation available to anyone who has the link."))
+
+
+                            div.d-none
+                                div.form-divider
+                                span.fw-semibold.mb-1.text-muted #{__("Asana Integration")}
+
+                                .col-xl-6.mb-3
+                                    label.form-label(for="txt_asana_project_id") #{__("Asana Project ID")}
+                                    input#txt_asana_project_id.form-control(type="text", placeholder=__("Asana Project ID") value=data.project.asana_project_id)
+                                .col-xl-6.mb-3
+                                    label.form-label(for="txt_asana_api_key") #{__("Asana API Key")}
+                                    .input-group
+                                        input#txt_asana_api_key.form-control(type="password", placeholder=__("Asana API Key") name="asana_api_key" value=data.project.asana_api_key)
+                                        button.btn.btn-light(onclick="createpassword('txt_asana_api_key',this)", type="button")
+                                            i.ri-eye-off-line.align-middle
+                                
+
+                            .col-xl-12
+                                .float-end
+                                    button#btn_edit_project.btn.btn-primary.m-1
+                                        | #{__("Save Changes")} 
+                                .float-end
+                                    a.btn.btn-primary-light.m-1(href="/project/project-list")
+                                        | #{__("Cancel")} 
+            .col-xl-5
+                include ../../partials/application/project/project-faq.pug
+                include ../../partials/modal/image-lightbox-modal.pug
+    script.
+        $(document).ready(function() {
+            init();
+            
+            async function init() {
+                let editProject = await clGetEditProject();
+            }
+        });
+
